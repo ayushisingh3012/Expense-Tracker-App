@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!  This is my first project \nyeee geetika\n yeee ayushii\n yeee gauri dhruvi"
+        android:text="Hello World!  This is my first project \nyeee geetika\n yeee ayushii\n yeee gauri dhruvi\n updated"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
