@@ -50,14 +50,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+    // Registration Activity
         mSignupHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),RegistrationActivity.class));
             }
         });
-
+        // Reset password Activity ...
+        mForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),ResetActivity.class));
+            }
+        });
 
     }
 }
