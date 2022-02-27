@@ -56,8 +56,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:gravity="center"
-
-                android:margin="10dp"
+                android:layout_margin="10dp"
                 android:text="Log In"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
