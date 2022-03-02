@@ -4,6 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android Studio Files/Expense-Tracker-App/app/src/main/res/layout/activity_main.xml" value="0.4466666666666667" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/drawable-anydpi/dashboard.xml" value="0.19" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/drawable-anydpi/expense.xml" value="0.19" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/drawable-anydpi/income.xml" value="0.19" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.19" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout-land/content_main.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_home.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/content_main.xml" value="0.144" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/menu/bottommenu.xml" value="0.72" />
         <entry key="..\:/android studio projects/Expense-Tracker-App/app/src/main/res/drawable/background_color.xml" value="0.5964285714285714" />
         <entry key="..\:/android studio projects/Expense-Tracker-App/app/src/main/res/drawable/edittext_background.xml" value="0.14635416666666667" />
         <entry key="..\:/android studio projects/Expense-Tracker-App/app/src/main/res/layout/activity_main.xml" value="0.1" />
