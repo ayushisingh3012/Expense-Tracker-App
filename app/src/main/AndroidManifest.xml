@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExpenseTrackerApp">
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity android:name=".ResetActivity" />
         <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
-        <activity android:name=".HomeActivity"
+        <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
