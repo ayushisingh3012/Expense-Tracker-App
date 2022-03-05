@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     private TextView mForgetPassword;
     private TextView mSignupHere;
-
+    private static final String TAG="EmailPassword";
     private ProgressDialog mDialog;
     //Firebase
     private FirebaseAuth mAuth;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else{
                             mDialog.dismiss();
+                            Log.w(TAG,"signUpWithEmail.failure",task.getException());
                             Toast.makeText(getApplicationContext(),"Login Failed..",Toast.LENGTH_SHORT).show();
                         }
                     }
