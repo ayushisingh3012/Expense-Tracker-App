@@ -8,8 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="toolbar_color">FF9C27B0</color>
+    <color name="toolbar_color">#9C27B0</color>
 
-    <color name="nav_header">FFFFC107</color>
+    <color name="nav_header">#00BCD4</color>
 
 </resources>
