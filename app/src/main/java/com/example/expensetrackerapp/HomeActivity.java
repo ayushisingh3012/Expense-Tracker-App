@@ -14,11 +14,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private BottomNavigationView bottomNavigationView;
+    private FrameLayout frameLayout;
+
+    //Fragment
+    private DashboardFragment dashboardFragment;
+    private IncomeFragment incomeFragment;
+    private ExpenseFragment expenseFragment;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -31,6 +42,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (toolbar!=null)
             setSupportActionBar(toolbar);
 
+        bottomNavigationView=findViewById(R.id.bottomNavigationbar);
+        frameLayout=findViewById(R.id.main_frame);
 
         DrawerLayout drawerLayout=findViewById(R.id.drawer_layout);
 
@@ -41,8 +54,48 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView=findViewById(R.id.naView);
         navigationView.setNavigationItemSelectedListener(this);
 
+        dashboardFragment=new DashboardFragment();
+        incomeFragment=new IncomeFragment();
+        expenseFragment=new ExpenseFragment();
+
+        setFragment(dashboardFragment);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+
+                    case R.id.dashboard:
+                        setFragment(dashboardFragment);
+                        bottomNavigationView.setItemBackgroundResource(R.color.dashboard_color);
+                        return true;
+
+                    case R.id.income:
+                        setFragment(incomeFragment);
+                        bottomNavigationView.setItemBackgroundResource(R.color.income_color);
+                        return true;
+
+                    case R.id.expense:
+                        setFragment(expenseFragment);
+                        bottomNavigationView.setItemBackgroundResource(R.color.expense_color);
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+
 
     }
+
+    private void setFragment(Fragment fragment) {
+
+        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onBackPressed()
     {
@@ -63,12 +116,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch(itemId)
         {
             case R.id.dashboard:
+                fragment=new DashboardFragment();
                 break;
             case R.id.expense:
-
+                fragment=new ExpenseFragment();
                 break;
             case R.id.income:
-
+                fragment=new IncomeFragment();
                 break;
         }
         if(fragment!=null)
