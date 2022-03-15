@@ -262,6 +262,9 @@ public class DashboardFragment extends Fragment {
                     amount.setError("Required Field.....");
                     return;
                 }
+
+                int inamount=Integer.parseInt(tmamount);
+
                 if(TextUtils.isEmpty(tmtype))
                 {
                     type.setError("Required Field.....");
@@ -272,11 +275,17 @@ public class DashboardFragment extends Fragment {
                     note.setError("Required Field....");
                     return;
                 }
+
+                String id=mExpenseDatabase.push().getKey();
+                String mDate=DateFormat.getDateInstance().format(new Date());
+
+                Data data=new Data(inamount,tmtype,tmnote,id,mDate);
+                mExpenseDatabase.child(id).setValue(data);
+
+                Toast.makeText(getActivity(),"Data added",Toast.LENGTH_SHORT).show();
+
                 ftAnimation();
-
-
-
-
+                dialog.dismiss();
             }
         });
 
