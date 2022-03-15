@@ -14,12 +14,12 @@
 
     <color name="dashboard_color">#FFBB86FC</color>
 
-    <color name="income_color">#FF03DAC5</color>
+    <color name="income_color">#1E2221</color>
 
-    <color name="expense_color">#00BCD4</color>
+    <color name="expense_color">#1E2221</color>
 
-    <color name="date_color">#50E8C4</color>
+    <color name="date_color">#1E2221</color>
 
-    <color name="expense_amount">#FFF48BA9</color>
+    <color name="expense_amount">#1E2221</color>
 
 </resources>
