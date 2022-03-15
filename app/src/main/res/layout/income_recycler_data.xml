@@ -25,36 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="16 March 2022"
+                android:gravity="center"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/date_color"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/type_txt_income"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="Type"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/note_txt_income"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/type_txt_income"
-                android:maxLines="1"
-                android:text="Note"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -65,10 +38,47 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/type_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Type"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/note_txt_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Note"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <TextView
                 android:id="@+id/amount_txt_income"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="600000"
+                android:gravity="center"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/income_color"
                 android:textStyle="bold" />

@@ -26,13 +26,14 @@
                 android:text="16 March 2022"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/date_color"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center"/>
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:background="@color/white">
             <TextView
@@ -44,7 +45,14 @@
                 android:textStyle="bold"
                 android:id="@+id/type_txt_expense"
                 android:textColor="@android:color/black"
+                android:gravity="center"
                 />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,8 +61,8 @@
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_below="@+id/type_txt_expense"
                 android:id="@+id/note_txt_expense"
+                android:gravity="center"
                 />
 
         </RelativeLayout>
@@ -71,7 +79,8 @@
                 android:text="600000"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/expense_amount"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center"/>
 
         </RelativeLayout>
 
