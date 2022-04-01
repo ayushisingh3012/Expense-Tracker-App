@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/date_txt_income"
+                android:id="@+id/date_txt_expense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="16 March 2022"
