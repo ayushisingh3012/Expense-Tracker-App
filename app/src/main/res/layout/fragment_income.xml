@@ -5,19 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".IncomeFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         app:cardElevation="5dp"
         android:elevation="10dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#6225CD"
+            android:layout_marginTop="50dp">
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -28,10 +31,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@color/black"
                     android:text="income"
-                    />
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -42,13 +44,13 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/income_txt_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/income_txt_result"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textColor="@color/black"
+                    android:gravity="center"
                     android:text="0000.00"
-                    />
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -58,7 +60,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/recycler_id_income"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#1796D6">
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
