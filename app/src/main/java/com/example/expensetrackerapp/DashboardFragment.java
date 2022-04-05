@@ -163,6 +163,8 @@ public class DashboardFragment extends Fragment
                 {
                     Data data=mysnap.getValue(Data.class);
                     totalsum+=data.getAmount();
+                    result+=totalsum;
+                    totalBalance.setText(String.valueOf(result));
                     String stResult=String.valueOf(totalsum);
                     totalincomeresult.setText(stResult+".00");
                 }
@@ -186,7 +188,8 @@ public class DashboardFragment extends Fragment
                     Data data=mysnap.getValue(Data.class);
 
                     totalsum+= data.getAmount();
-
+                    result-=totalsum;
+                    totalBalance.setText(String.valueOf(result));
 
                     totalexpenseresult.setText(String.valueOf(totalsum)+".00");
                 }
