@@ -23,6 +23,31 @@
             android:background="@color/white"
             android:orientation="vertical"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Balance :  "
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="17sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="00.00"
+                    android:textColor="@color/head"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:id="@+id/ds_balance"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

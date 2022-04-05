@@ -40,7 +40,8 @@ import java.util.Date;
  * A simple {@link Fragment} subclass.
 
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment
+{
 
     //Floating button
     private FloatingActionButton fab_main_btn;
@@ -61,6 +62,7 @@ public class DashboardFragment extends Fragment {
     //DashBoard income and expense
     private TextView totalincomeresult;
     private TextView totalexpenseresult;
+    private TextView totalBalance;
 
     //Recycler..
     private RecyclerView mRecyclerIncome;
@@ -71,6 +73,8 @@ public class DashboardFragment extends Fragment {
     private DatabaseReference mIncomeDatabase;
     private DatabaseReference mExpenseDatabase;
     public String TAG="Expense Tracker App";
+
+    private int result=0,inc,exp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,8 +102,10 @@ public class DashboardFragment extends Fragment {
         fab_expense_txt=myview.findViewById(R.id.expense_ft_txt);
 
         // Total income and expense result set
+        totalBalance=myview.findViewById(R.id.ds_balance);
         totalincomeresult=myview.findViewById(R.id.income_set_result);
         totalexpenseresult=myview.findViewById(R.id.expense_set_result);
+
 
         //Recycler..
         mRecyclerIncome=myview.findViewById(R.id.recycler_income);
@@ -144,21 +150,23 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
+
         //Calculate total income
+        result=0;
         mIncomeDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int totalsum=0;
+
                 for (DataSnapshot mysnap:snapshot.getChildren())
                 {
                     Data data=mysnap.getValue(Data.class);
-
                     totalsum+=data.getAmount();
-
                     String stResult=String.valueOf(totalsum);
-
                     totalincomeresult.setText(stResult+".00");
                 }
+
             }
 
             @Override
@@ -166,6 +174,7 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+
 
         //Calculate total expense
         mExpenseDatabase.addValueEventListener(new ValueEventListener() {
@@ -178,8 +187,10 @@ public class DashboardFragment extends Fragment {
 
                     totalsum+= data.getAmount();
 
+
                     totalexpenseresult.setText(String.valueOf(totalsum)+".00");
                 }
+                
             }
 
             @Override
@@ -187,6 +198,7 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+    result=0;
 
         //Recycler
         LinearLayoutManager linearLayoutManagerIncome=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
