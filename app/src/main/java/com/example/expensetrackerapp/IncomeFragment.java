@@ -147,7 +147,6 @@ public class IncomeFragment extends Fragment {
                 });
             }
         };
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -246,7 +245,6 @@ public class IncomeFragment extends Fragment {
             }
         });
         dialog.show();
-
 
     }
 }

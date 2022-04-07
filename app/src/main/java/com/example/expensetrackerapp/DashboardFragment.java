@@ -1,6 +1,7 @@
 package com.example.expensetrackerapp;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 
@@ -24,6 +25,8 @@ import android.widget.Toast;
 
 import com.example.expensetrackerapp.Model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,9 +75,10 @@ public class DashboardFragment extends Fragment
     private FirebaseAuth mAuth;
     private DatabaseReference mIncomeDatabase;
     private DatabaseReference mExpenseDatabase;
+    private DatabaseReference mBalanceDatabase;
     public String TAG="Expense Tracker App";
 
-    private int result=0,inc,exp;
+    public int result=0,inc,exp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +92,7 @@ public class DashboardFragment extends Fragment
 
         mIncomeDatabase= FirebaseDatabase.getInstance().getReference().child("IncomeData").child(uid);
         mExpenseDatabase=FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uid);
+        mBalanceDatabase=FirebaseDatabase.getInstance().getReference().child("BalanceData").child(uid);
 
         mIncomeDatabase.keepSynced(true);
         mExpenseDatabase.keepSynced(true);
@@ -112,11 +117,10 @@ public class DashboardFragment extends Fragment
         mRecyclerExpense=myview.findViewById(R.id.recycler_expense);
 
 
-
+        result=0;inc=0;exp=0;
         //Animation connect...
         FadOpen= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_open);
         FadeClose= AnimationUtils.loadAnimation(getActivity(),R.anim.fade_close);
-
         fab_main_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,55 +157,58 @@ public class DashboardFragment extends Fragment
 
 
         //Calculate total income
-        result=0;
+
         mIncomeDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int totalsum=0;
+                int totalsum=0;inc=0;
 
                 for (DataSnapshot mysnap:snapshot.getChildren())
                 {
                     Data data=mysnap.getValue(Data.class);
                     totalsum+=data.getAmount();
-                    result+=totalsum;
+                    inc+= data.getAmount();
+                    result+= data.getAmount();
                     totalBalance.setText(String.valueOf(result));
                     String stResult=String.valueOf(totalsum);
                     totalincomeresult.setText(stResult+".00");
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-
         //Calculate total expense
-        mExpenseDatabase.addValueEventListener(new ValueEventListener() {
+        mExpenseDatabase.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int totalsum=0;
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                int totalsum=0;exp=0;
                 for(DataSnapshot mysnap:snapshot.getChildren())
                 {
                     Data data=mysnap.getValue(Data.class);
-
+                    exp+=data.getAmount();
                     totalsum+= data.getAmount();
-                    result-=totalsum;
+                    result-= data.getAmount();
                     totalBalance.setText(String.valueOf(result));
-
                     totalexpenseresult.setText(String.valueOf(totalsum)+".00");
                 }
-                
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error)
+            {
 
             }
         });
-    result=0;
+
+        //Balance
+
+
+
+
 
         //Recycler
         LinearLayoutManager linearLayoutManagerIncome=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
@@ -265,7 +272,11 @@ public class DashboardFragment extends Fragment
         }
     }
 
-    public void incomeDataInsert(){
+    public void incomeDataInsert()
+    {
+        result-=inc;
+        inc=0;
+
         AlertDialog.Builder mydailog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
         View myview=inflater.inflate(R.layout.custom_layout_for_insertdata,null);
@@ -320,6 +331,7 @@ public class DashboardFragment extends Fragment
                 ftAnimation();
                 dialog.dismiss();
 
+
             }
         });
 
@@ -335,6 +347,8 @@ public class DashboardFragment extends Fragment
     }
 
     public void expenseDataInsert(){
+        result+=exp;
+        exp=0;
 
         AlertDialog.Builder mydialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());

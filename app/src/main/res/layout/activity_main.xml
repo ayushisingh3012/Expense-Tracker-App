@@ -47,7 +47,8 @@
                 android:hint="Password"
                 android:padding="10dp"
                 android:textColor="#561E9A"
-                android:textColorHint="#561E9A" />
+                android:textColorHint="#561E9A"
+                android:inputType="textPassword"/>
 
             <Button
                 android:id="@+id/btn_login"
@@ -67,7 +68,7 @@
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="Forget Password"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/signup_reg"
