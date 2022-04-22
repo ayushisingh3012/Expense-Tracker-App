@@ -15,6 +15,12 @@
     <item android:id="@+id/category"
         android:icon="@drawable/category"
         android:title="Expense Category"/>
+
+    <item
+        android:id="@+id/bal_division"
+        android:title="Balance Division"
+        android:icon="@drawable/bal"/>
+
     <item android:id="@+id/logout"
         android:title="Logout"
         android:icon="@drawable/logout"

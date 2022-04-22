@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ExpenseFragment expenseFragment;
     private IncomeCategory incomecategoryFragment;
     private Category  categoryFragment;
+    private bal_div b1;
 
     FirebaseAuth mAuth;
 
@@ -143,6 +144,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.category:
                 fragment=new Category();
+                break;
+            case R.id.bal_division:
+                fragment=new bal_div();
                 break;
             case R.id.logout:
                 mAuth.signOut();
