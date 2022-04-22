@@ -3,6 +3,7 @@ package com.example.expensetrackerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,11 +76,35 @@ public class RegistrationActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             mDialog.dismiss();
                             Toast.makeText(getApplicationContext(),"Registration Complete",Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder
+                                    = new AlertDialog
+                                    .Builder(RegistrationActivity.this);
+
+                            // Set the message show for the Alert time
+                            builder.setMessage("Welcome");
+                            builder.setTitle("Registration Successful");
+
+                            AlertDialog alertDialog = builder.create();
+
+                            // Show the Alert Dialog box
+                            alertDialog.show();
                             startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                         }
                         else{
                             mDialog.dismiss();
                             Log.w(TAG,"signUpWithEmail.failure",task.getException());
+                            AlertDialog.Builder builder
+                                    = new AlertDialog
+                                    .Builder(RegistrationActivity.this);
+
+                            // Set the message show for the Alert time
+                            builder.setMessage("There is some error");
+                            builder.setTitle("Registration Failed");
+
+                            AlertDialog alertDialog = builder.create();
+
+                            // Show the Alert Dialog box
+                            alertDialog.show();
                             Toast.makeText(getApplicationContext(),"Registration Failed...",Toast.LENGTH_SHORT).show();
 
                         }

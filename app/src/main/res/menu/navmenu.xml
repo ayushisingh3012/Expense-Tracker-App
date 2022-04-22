@@ -9,8 +9,15 @@
     <item android:id="@id/expense"
         android:title="Expense"
         android:icon="@drawable/expense"/>
+    <item android:id="@+id/income_category"
+        android:icon="@drawable/category"
+        android:title="Income Category"/>
+    <item android:id="@+id/category"
+        android:icon="@drawable/category"
+        android:title="Expense Category"/>
     <item android:id="@+id/logout"
         android:title="Logout"
         android:icon="@drawable/logout"
         />
+
 </menu>

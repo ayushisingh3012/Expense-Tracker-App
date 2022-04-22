@@ -15,7 +15,8 @@
         android:elevation="10dp"
         app:cardElevation="5dp"
         android:layout_marginTop="70dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:id="@+id/card">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,6 +49,17 @@
                     android:textSize="17sp"
                     android:id="@+id/ds_balance"/>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:id="@+id/bal_message"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -131,6 +143,8 @@
 
 
             </LinearLayout>
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

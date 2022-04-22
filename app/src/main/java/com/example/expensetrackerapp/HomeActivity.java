@@ -32,6 +32,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DashboardFragment dashboardFragment;
     private IncomeFragment incomeFragment;
     private ExpenseFragment expenseFragment;
+    private IncomeCategory incomecategoryFragment;
+    private Category  categoryFragment;
 
     FirebaseAuth mAuth;
 
@@ -63,6 +65,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         dashboardFragment=new DashboardFragment();
         incomeFragment=new IncomeFragment();
         expenseFragment=new ExpenseFragment();
+        categoryFragment=new Category();
+        incomecategoryFragment=new IncomeCategory();
 
         setFragment(dashboardFragment);
 
@@ -133,6 +137,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.income:
                 fragment=new IncomeFragment();
+                break;
+            case R.id.income_category:
+                fragment=new IncomeCategory();
+                break;
+            case R.id.category:
+                fragment=new Category();
                 break;
             case R.id.logout:
                 mAuth.signOut();

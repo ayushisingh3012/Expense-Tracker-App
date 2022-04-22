@@ -2,10 +2,12 @@ package com.example.expensetrackerapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +42,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,9 +58,13 @@ public class DashboardFragment extends Fragment
     private FloatingActionButton fab_income_btn;
     private FloatingActionButton fab_expense_btn;
 
+    //CardView
+    private CardView card;
+
     //Floating button textview...
     private TextView fab_income_txt;
     private TextView fab_expense_txt;
+    private  TextView bal_mess;
 
     //boolean
     private boolean isOpen=false;
@@ -75,7 +86,8 @@ public class DashboardFragment extends Fragment
     private FirebaseAuth mAuth;
     private DatabaseReference mIncomeDatabase;
     private DatabaseReference mExpenseDatabase;
-    private DatabaseReference mBalanceDatabase;
+    private DatabaseReference mCategoryDatabase;
+    private DatabaseReference mIncomeCategoryDataBase;
     public String TAG="Expense Tracker App";
 
     public int result=0,inc,exp;
@@ -92,10 +104,15 @@ public class DashboardFragment extends Fragment
 
         mIncomeDatabase= FirebaseDatabase.getInstance().getReference().child("IncomeData").child(uid);
         mExpenseDatabase=FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uid);
-        mBalanceDatabase=FirebaseDatabase.getInstance().getReference().child("BalanceData").child(uid);
+        mCategoryDatabase=FirebaseDatabase.getInstance().getReference().child("Category").child(uid);
+        mIncomeCategoryDataBase=FirebaseDatabase.getInstance().getReference().child("IncomeCategory").child(uid);
+
+        card=myview.findViewById(R.id.card);
 
         mIncomeDatabase.keepSynced(true);
         mExpenseDatabase.keepSynced(true);
+        mCategoryDatabase.keepSynced(true);
+        mIncomeCategoryDataBase.keepSynced(true);
 
         //Connect floating button to layout
         fab_main_btn=myview.findViewById(R.id.fb_main_plus_btn);
@@ -105,6 +122,7 @@ public class DashboardFragment extends Fragment
         //Connect floating text
         fab_income_txt=myview.findViewById(R.id.income_ft_text);
         fab_expense_txt=myview.findViewById(R.id.expense_ft_txt);
+        bal_mess=myview.findViewById(R.id.bal_message);
 
         // Total income and expense result set
         totalBalance=myview.findViewById(R.id.ds_balance);
@@ -172,6 +190,27 @@ public class DashboardFragment extends Fragment
                     totalBalance.setText(String.valueOf(result));
                     String stResult=String.valueOf(totalsum);
                     totalincomeresult.setText(stResult+".00");
+
+                    if(inc>exp)
+                        bal_mess.setText("Budget Surplus");
+                    else if(inc<exp)
+                        bal_mess.setText("Budget Deficit");
+                    else
+                        bal_mess.setText("Low Balance");
+                    String s=bal_mess.getText().toString().trim();
+                    switch(s)
+                    {
+                        case "Budget Surplus":
+                            bal_mess.setTextColor(Color.BLUE);
+                            break;
+                        case "Budget Deficit":
+                            bal_mess.setTextColor(Color.RED);
+                            break;
+                        case "Low Balance":
+                            bal_mess.setTextColor(Color.MAGENTA);
+                            break;
+                    }
+
                 }
             }
             @Override
@@ -195,6 +234,26 @@ public class DashboardFragment extends Fragment
                     result-= data.getAmount();
                     totalBalance.setText(String.valueOf(result));
                     totalexpenseresult.setText(String.valueOf(totalsum)+".00");
+
+                    if(inc>exp)
+                        bal_mess.setText("Budget Surplus");
+                    else if(inc<exp)
+                        bal_mess.setText("Budget Deficit");
+                    else
+                        bal_mess.setText("Low Balance");
+                    String s=bal_mess.getText().toString().trim();
+                    switch(s)
+                    {
+                        case "Budget Surplus":
+                            bal_mess.setTextColor(Color.BLUE);
+                            break;
+                        case "Budget Deficit":
+                            bal_mess.setTextColor(Color.RED);
+                            break;
+                        case "Low Balance":
+                            bal_mess.setTextColor(Color.MAGENTA);
+                            break;
+                    }
                 }
             }
             @Override
@@ -205,7 +264,6 @@ public class DashboardFragment extends Fragment
         });
 
         //Balance
-
 
 
 
@@ -285,18 +343,54 @@ public class DashboardFragment extends Fragment
 
         dialog.setCancelable(false);
 
+
+
         EditText editAmount=myview.findViewById(R.id.amount_edit);
-        EditText editType=myview.findViewById(R.id.type_edit);
+        Spinner editType= (Spinner) myview.findViewById(R.id.type_edit);
         EditText editNote=myview.findViewById(R.id.note_edit);
 
         Button btnCancel=myview.findViewById(R.id.btnCancel);
         Button btnSave=myview.findViewById(R.id.btnSave);
 
+        mIncomeCategoryDataBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> list = new ArrayList<>();
+                for(DataSnapshot ds:snapshot.getChildren())
+                {
+                    String c=ds.child("category").getValue(String.class);
+                    list.add(c);
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item,list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    editType.setAdapter(adapter);
+                    editType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            ((TextView)adapterView.getChildAt(0)).setTextColor(Color.BLACK);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String amount=editAmount.getText().toString().trim();
-                String type=editType.getText().toString().trim();
+                String type=editType.getSelectedItem().toString().trim();
                 String note=editNote.getText().toString().trim();
 
                 if(TextUtils.isEmpty(amount))
@@ -307,7 +401,7 @@ public class DashboardFragment extends Fragment
 
                 if(TextUtils.isEmpty(type))
                 {
-                    editType.setError("Required");
+                    ((TextView)editType.getSelectedView()).setError("Required");
                     return;
                 }
 
@@ -360,17 +454,52 @@ public class DashboardFragment extends Fragment
         dialog.setCancelable(false);
         EditText amount=myview.findViewById(R.id.amount_edit);
         EditText note=myview.findViewById(R.id.note_edit);
-        EditText type=myview.findViewById(R.id.type_edit);
+        Spinner editType= (Spinner) myview.findViewById(R.id.type_edit);
 
         Button btnSave=myview.findViewById(R.id.btnSave);
         Button btnCancel=myview.findViewById(R.id.btnCancel);
+
+
+        mCategoryDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> list = new ArrayList<>();
+                for(DataSnapshot ds:snapshot.getChildren())
+                {
+                    String c=ds.child("category").getValue(String.class);
+                    list.add(c);
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item,list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    editType.setAdapter(adapter);
+                    editType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            ((TextView)adapterView.getChildAt(0)).setTextColor(Color.BLACK);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String tmamount=amount.getText().toString().trim();
-                String tmtype=type.getText().toString().trim();
+                String tmtype=editType.getSelectedItem().toString().trim();
                 String tmnote=note.getText().toString().trim();
 
                 if(TextUtils.isEmpty(tmamount))
@@ -383,7 +512,7 @@ public class DashboardFragment extends Fragment
 
                 if(TextUtils.isEmpty(tmtype))
                 {
-                    type.setError("Required Field.....");
+                    ((TextView)editType.getSelectedView()).setError("Required Field.....");
                     return;
                 }
                 if(TextUtils.isEmpty((tmnote)))
