@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.expensetrackerapp.Model.Cat2;
 import com.example.expensetrackerapp.Model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -38,6 +40,8 @@ public class ExpenseFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mExpenseDatabase;
+    private DatabaseReference mExpCatDiv;
+    private int ans,intammount;
 
     //Recyclerview
     private RecyclerView recyclerView;
@@ -70,6 +74,7 @@ public class ExpenseFragment extends Fragment {
         FirebaseUser mUser=mAuth.getCurrentUser();
         String uid=mUser.getUid();
         mExpenseDatabase= FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uid);
+        mExpCatDiv=FirebaseDatabase.getInstance().getReference().child("ExpenseCategoryDivision").child(uid);
 
         expenseSumResult=myview.findViewById(R.id.expense_txt_result);
 
@@ -126,7 +131,8 @@ public class ExpenseFragment extends Fragment {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setAmount(model.getAmount());
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.mView.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
                     public void onClick(View view) {
 
@@ -182,6 +188,8 @@ public class ExpenseFragment extends Fragment {
 
     private void updateDataItem()
     {
+
+        ans=0;
         AlertDialog.Builder mydialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
         View mview=inflater.inflate(R.layout.update_data_item,null);
@@ -210,13 +218,96 @@ public class ExpenseFragment extends Fragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String prevType=type;
 
                 type=edtType.getText().toString().trim();
                 note=edtNote.getText().toString().trim();
 
                 String stammount=String.valueOf(ammount);
                 stammount=edtAmmount.getText().toString().trim();
-                int intammount=Integer.parseInt(stammount);
+                intammount=Integer.parseInt(stammount);
+
+                if(prevType.equals(type))
+                {
+                    mExpCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 c=mysnap.getValue(Cat2.class);
+
+                                if(c.getType().equals(type))
+                                {
+                                    mExpCatDiv.child(type).child("amount").setValue(c.getAmount()-ammount+intammount);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                else if(!prevType.equals(type))
+                {
+
+                    mExpCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot)
+                        {
+                            for(DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 c=mysnap.getValue(Cat2.class);
+                                if(c.getType().equals(prevType))
+                                {
+                                    ans+=c.getAmount();
+                                    if(ans==intammount)
+                                        mExpCatDiv.child(prevType).removeValue();
+                                    else
+                                        mExpCatDiv.child(prevType).child("amount").setValue(ans-intammount);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    mExpCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot)
+                        {
+                            boolean flag = false;
+                            for (DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 t=mysnap.getValue(Cat2.class);
+                                if(t.getType().equals(type))
+                                {
+                                    flag=true;
+                                    int ans2=t.getAmount()+intammount;
+                                    Cat2 c=new Cat2(ans2,type,type);
+                                    mExpCatDiv.child(type).setValue(c);
+
+                                }
+
+                            }
+                            if (flag==false)
+                            {
+                                Cat2 c=new Cat2(intammount,type,type);
+                                mExpCatDiv.child(type).setValue(c);
+
+                            }
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
 
                 String mDate= DateFormat.getDateInstance().format(new Date());
 
@@ -231,7 +322,39 @@ public class ExpenseFragment extends Fragment {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
+
+
+                mExpCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot)
+                    {
+                        for(DataSnapshot mysnap:snapshot.getChildren())
+                        {
+                            Cat2 c=mysnap.getValue(Cat2.class);
+                            if(c.getType().equals(type))
+                            {
+                                ans+=c.getAmount();
+                                if(ans==ammount)
+                                    mExpCatDiv.child(type).removeValue();
+                                else
+                                    mExpCatDiv.child(type).child("amount").setValue(ans-ammount);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
                 mExpenseDatabase.child(post_key).removeValue();
+
                 dialog.dismiss();
             }
         });

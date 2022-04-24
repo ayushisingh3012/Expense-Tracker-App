@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.expensetrackerapp.Model.Cat2;
 import com.example.expensetrackerapp.Model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,8 @@ public class IncomeFragment extends Fragment {
     //Firebase database
 
     private DatabaseReference mIncomeDatabase;
+    private DatabaseReference mIncCatDiv;
+    private int ans,intammount;
 
     //recyclerview
     private RecyclerView recyclerView;
@@ -73,6 +76,7 @@ public class IncomeFragment extends Fragment {
         String uid=mUser.getUid();
 
         mIncomeDatabase= FirebaseDatabase.getInstance().getReference().child("IncomeData").child(uid);
+        mIncCatDiv=FirebaseDatabase.getInstance().getReference().child("IncomeCategoryDivision").child(uid);
 
         incomeTotalSum=myview.findViewById(R.id.income_txt_result);
 
@@ -187,6 +191,8 @@ public class IncomeFragment extends Fragment {
 
     private void updateDataItem(){
 
+        ans=0;
+
         AlertDialog.Builder mydialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
 
@@ -216,6 +222,7 @@ public class IncomeFragment extends Fragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String prevType=type;
                 type=edtType.getText().toString().trim();
                 note=edtNote.getText().toString().trim();
 
@@ -224,6 +231,88 @@ public class IncomeFragment extends Fragment {
                 mdammount=edtAmount.getText().toString().trim();
 
                 int myAmmount=Integer.parseInt(mdammount);
+
+                if(prevType.equals(type))
+                {
+                    mIncCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 c=mysnap.getValue(Cat2.class);
+
+                                if(c.getType().equals(type))
+                                {
+                                    mIncCatDiv.child(type).child("amount").setValue(c.getAmount()-amount+myAmmount);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                else if(!prevType.equals(type))
+                {
+
+                    mIncCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot)
+                        {
+                            for(DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 c=mysnap.getValue(Cat2.class);
+                                if(c.getType().equals(prevType))
+                                {
+                                    ans+=c.getAmount();
+                                    if(ans==intammount)
+                                        mIncCatDiv.child(prevType).removeValue();
+                                    else
+                                        mIncCatDiv.child(prevType).child("amount").setValue(ans-myAmmount);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    mIncCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot)
+                        {
+                            boolean flag = false;
+                            for (DataSnapshot mysnap:snapshot.getChildren())
+                            {
+                                Cat2 t=mysnap.getValue(Cat2.class);
+                                if(t.getType().equals(type))
+                                {
+                                    flag=true;
+                                    int ans2=t.getAmount()+myAmmount;
+                                    Cat2 c=new Cat2(ans2,type,type);
+                                    mIncCatDiv.child(type).setValue(c);
+
+                                }
+
+                            }
+                            if (flag==false)
+                            {
+                                Cat2 c=new Cat2(myAmmount,type,type);
+                                mIncCatDiv.child(type).setValue(c);
+
+                            }
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
 
                 String mDate= DateFormat.getDateInstance().format(new Date());
 
@@ -238,6 +327,33 @@ public class IncomeFragment extends Fragment {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                mIncCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot)
+                    {
+                        for(DataSnapshot mysnap:snapshot.getChildren())
+                        {
+                            Cat2 c=mysnap.getValue(Cat2.class);
+                            if(c.getType().equals(type))
+                            {
+                                ans+=c.getAmount();
+                                if(ans==amount)
+                                    mIncCatDiv.child(type).removeValue();
+                                else
+                                    mIncCatDiv.child(type).child("amount").setValue(ans-amount);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
 
                 mIncomeDatabase.child(post_key).removeValue();
                 dialog.dismiss();

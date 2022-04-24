@@ -1,19 +1,18 @@
 package com.example.expensetrackerapp;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Animatable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.expensetrackerapp.Model.Cat2;
 import com.example.expensetrackerapp.Model.Data;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,6 +63,9 @@ public class DashboardFragment extends Fragment
     private TextView fab_income_txt;
     private TextView fab_expense_txt;
     private  TextView bal_mess;
+
+    public  HashMap<String,Integer> hp1=new HashMap<>();
+    public  HashMap<String,Integer> hp2=new HashMap<>();
 
     //boolean
     private boolean isOpen=false;
@@ -88,9 +89,11 @@ public class DashboardFragment extends Fragment
     private DatabaseReference mExpenseDatabase;
     private DatabaseReference mCategoryDatabase;
     private DatabaseReference mIncomeCategoryDataBase;
+    private DatabaseReference mExpCatDiv;
+    private DatabaseReference mIncCatDiv;
     public String TAG="Expense Tracker App";
 
-    public int result=0,inc,exp;
+    private int result,inc,exp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +109,9 @@ public class DashboardFragment extends Fragment
         mExpenseDatabase=FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uid);
         mCategoryDatabase=FirebaseDatabase.getInstance().getReference().child("Category").child(uid);
         mIncomeCategoryDataBase=FirebaseDatabase.getInstance().getReference().child("IncomeCategory").child(uid);
+        mExpCatDiv=FirebaseDatabase.getInstance().getReference().child("ExpenseCategoryDivision").child(uid);
+        mIncCatDiv=FirebaseDatabase.getInstance().getReference().child("IncomeCategoryDivision").child(uid);
+
 
         card=myview.findViewById(R.id.card);
 
@@ -133,6 +139,48 @@ public class DashboardFragment extends Fragment
         //Recycler..
         mRecyclerIncome=myview.findViewById(R.id.recycler_income);
         mRecyclerExpense=myview.findViewById(R.id.recycler_expense);
+
+
+        if(mExpCatDiv!=null)
+        {
+            mExpCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot mysnap:snapshot.getChildren())
+                    {
+                        Cat2 c=mysnap.getValue(Cat2.class);
+                        hp1.put(c.getType(),c.getAmount());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
+
+
+        if(mIncCatDiv!=null)
+        {
+            mIncCatDiv.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot mysnap:snapshot.getChildren())
+                    {
+                        Cat2 c=mysnap.getValue(Cat2.class);
+                        hp2.put(c.getType(),c.getAmount());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
 
 
         result=0;inc=0;exp=0;
@@ -332,8 +380,7 @@ public class DashboardFragment extends Fragment
 
     public void incomeDataInsert()
     {
-        result-=inc;
-        inc=0;
+
 
         AlertDialog.Builder mydailog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
@@ -389,6 +436,8 @@ public class DashboardFragment extends Fragment
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 String amount=editAmount.getText().toString().trim();
                 String type=editType.getSelectedItem().toString().trim();
                 String note=editNote.getText().toString().trim();
@@ -410,12 +459,27 @@ public class DashboardFragment extends Fragment
                     editNote.setError("Required");
                     return;
                 }
+                result-=inc;
+                inc=0;
 
                 int ouramountint=Integer.parseInt(amount);
 
 
                 String id=mIncomeDatabase.push().getKey();
                 String mDate= DateFormat.getDateInstance().format(new Date());
+
+                if(hp2.containsKey(type))
+                {
+                    int ans1=hp2.get(type)+ouramountint;
+                    hp2.put(type,ans1);
+                }
+                else
+                    hp2.put(type,ouramountint);
+
+                String id1=type;
+                Cat2 c=new Cat2(hp2.get(type),type,id1);
+                mIncCatDiv.child(id1).setValue(c);
+
                 Data data=new Data(ouramountint,type,note,id,mDate);
 
                 assert id != null;
@@ -441,8 +505,7 @@ public class DashboardFragment extends Fragment
     }
 
     public void expenseDataInsert(){
-        result+=exp;
-        exp=0;
+
 
         AlertDialog.Builder mydialog=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=LayoutInflater.from(getActivity());
@@ -495,8 +558,10 @@ public class DashboardFragment extends Fragment
         });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+
 
                 String tmamount=amount.getText().toString().trim();
                 String tmtype=editType.getSelectedItem().toString().trim();
@@ -521,11 +586,27 @@ public class DashboardFragment extends Fragment
                     return;
                 }
 
+                result+=exp;
+                exp=0;
+
                 String id=mExpenseDatabase.push().getKey();
                 String mDate=DateFormat.getDateInstance().format(new Date());
 
+                if(hp1.containsKey(tmtype))
+                {
+                    int ans=hp1.get(tmtype)+inamount;
+                    hp1.put(tmtype,ans);
+                }
+                else
+                    hp1.put(tmtype,inamount);
+
+                String id1=tmtype;
+                Cat2 c=new Cat2(hp1.get(tmtype),tmtype,id1);
+                mExpCatDiv.child(id1).setValue(c);
+
                 Data data=new Data(inamount,tmtype,tmnote,id,mDate);
                 mExpenseDatabase.child(id).setValue(data);
+
 
                 Toast.makeText(getActivity(),"Data added",Toast.LENGTH_SHORT).show();
 
