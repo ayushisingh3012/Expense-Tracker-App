@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -149,6 +150,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment=new bal_div();
                 break;
             case R.id.logout:
+                AlertDialog.Builder builder
+                        = new AlertDialog
+                        .Builder(HomeActivity.this);
+
+                // Set the message show for the Alert time
+                builder.setMessage("Back to login page !!");
+                builder.setTitle("Logout Successfully");
+
+                AlertDialog alertDialog = builder.create();
+
+                // Show the Alert Dialog box
+                alertDialog.show();
+
                 mAuth.signOut();
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 break;
