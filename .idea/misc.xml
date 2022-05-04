@@ -21,10 +21,17 @@
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_home.xml" value="0.264" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_income_cat_div.xml" value="0.2604166666666667" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_income_category.xml" value="0.264" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_income_date_div.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_main.xml" value="0.27025641025641023" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_month_inc.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_moth_exp.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_registration.xml" value="0.264" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_reset.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_stats.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_today_exp.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_today_inc.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_week_exp.xml" value="0.2604166666666667" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/activity_week_inc.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/add_category.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/appbar_layout.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/content_category.xml" value="0.22407407407407406" />
@@ -37,6 +44,7 @@
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/dashboard_income.xml" value="0.1" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/edit_category.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/exp_cat_div_recycler_data.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/exp_date_recycler.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/expense_recycler_data.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/fragment_category.xml" value="0.22407407407407406" />
         <entry key="..\:/Users/DELL/AndroidStudioProjects/ExpenseTrackerApp/app/src/main/res/layout/fragment_category_list.xml" value="0.2604166666666667" />

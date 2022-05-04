@@ -1,6 +1,7 @@
 package com.example.expensetrackerapp;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.expensetrackerapp.Model.Cat2;
@@ -28,7 +32,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *  method to
@@ -41,6 +47,7 @@ public class ExpenseFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mExpenseDatabase;
     private DatabaseReference mExpCatDiv;
+    private DatabaseReference mCategoryDatabase;
     private int ans,intammount;
 
     //Recyclerview
@@ -51,7 +58,7 @@ public class ExpenseFragment extends Fragment {
 
     //Update
     private EditText edtAmmount;
-    private EditText edtType;
+    private Spinner edtType;
     private  EditText edtNote;
 
     private Button btnUpdate;
@@ -60,6 +67,7 @@ public class ExpenseFragment extends Fragment {
 
     private String type;
     private String note;
+    private String date;
     private int ammount;
 
     private String post_key;
@@ -75,6 +83,7 @@ public class ExpenseFragment extends Fragment {
         String uid=mUser.getUid();
         mExpenseDatabase= FirebaseDatabase.getInstance().getReference().child("ExpenseData").child(uid);
         mExpCatDiv=FirebaseDatabase.getInstance().getReference().child("ExpenseCategoryDivision").child(uid);
+        mCategoryDatabase=FirebaseDatabase.getInstance().getReference().child("Category").child(uid);
 
         expenseSumResult=myview.findViewById(R.id.expense_txt_result);
 
@@ -140,6 +149,7 @@ public class ExpenseFragment extends Fragment {
                         type=model.getType();
                         note=model.getNote();
                         ammount=model.getAmount();
+                        date=model.getDate();
 
                         updateDataItem();
                     }
@@ -199,7 +209,7 @@ public class ExpenseFragment extends Fragment {
         edtType=mview.findViewById(R.id.type_edit);
         edtNote=mview.findViewById(R.id.note_edit);
 
-        edtType.setText(type);
+        // edtType.setText(type);
         edtType.setSelection(type.length());
 
         edtNote.setText(note);
@@ -215,12 +225,47 @@ public class ExpenseFragment extends Fragment {
         AlertDialog dialog=mydialog.create();
 
 
+        mCategoryDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> list = new ArrayList<>();
+                for(DataSnapshot ds:snapshot.getChildren())
+                {
+                    String c=ds.child("category").getValue(String.class);
+                    list.add(c);
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item,list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    edtType.setAdapter(adapter);
+                    edtType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                            ((TextView)adapterView.getChildAt(0)).setTextColor(Color.BLACK);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String prevType=type;
 
-                type=edtType.getText().toString().trim();
+                type=edtType.getSelectedItem().toString().trim();
                 note=edtNote.getText().toString().trim();
 
                 String stammount=String.valueOf(ammount);
@@ -309,9 +354,9 @@ public class ExpenseFragment extends Fragment {
 
                 }
 
-                String mDate= DateFormat.getDateInstance().format(new Date());
+               // String mDate= DateFormat.getDateInstance().format(new Date());
 
-                Data data=new Data(intammount,type,note,post_key,mDate);
+                Data data=new Data(intammount,type,note,post_key,date);
 
                 mExpenseDatabase.child(post_key).setValue(data);
 

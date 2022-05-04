@@ -246,6 +246,7 @@ public class DashboardFragment extends Fragment
                     else
                         bal_mess.setText("Low Balance");
                     String s=bal_mess.getText().toString().trim();
+
                     switch(s)
                     {
                         case "Budget Surplus":
@@ -459,6 +460,7 @@ public class DashboardFragment extends Fragment
                     editNote.setError("Required");
                     return;
                 }
+
                 result-=inc;
                 inc=0;
 
